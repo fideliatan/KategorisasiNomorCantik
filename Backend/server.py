@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import re
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="../Frontend/build", static_url_path="/")
 CORS(app)  # penting biar bisa diakses dari React (port 3000)
 
 def predict_category(num):
@@ -57,11 +57,15 @@ def check_number():
     result = predict_category(num)
     return jsonify(result)
 
+# === Serve React build ===
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
+def serve_react(path):
+    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
+        return send_from_directory(app.static_folder, path)
+    else:
+        return send_from_directory(app.static_folder, "index.html")
 
-@app.route("/", methods=["GET"])
-def home():
-    return "Backend AI Server is running 🚀"
-
-
+# === Run server ===
 if __name__ == "__main__":
-    app.run(port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5000)
