@@ -89,7 +89,7 @@ const checkCategory = async (num) => {
         <img src={`${process.env.PUBLIC_URL}/logo_telkom_indonesia.png`} alt="Telkom Indonesia" className="logo telkom"/>
       </div>
 
-      <div className="form-box">
+      <div className={`form-box ${showResult ? "expand" : ""}`}>
         <h2>Kategorisasi Nomor Cantik</h2>
 
         <label>Masukkan No. PTSN (Tanpa Kode Area)</label>
